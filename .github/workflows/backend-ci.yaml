@@ -40,4 +40,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker image
-        run: docker build --tag=mp-backend:${{ github.sha }} .
+        run: |
+          for i in 1 2 3 4 5; do
+            docker build --tag=mp-backend:${{ github.sha }} . && exit 0
+            echo "Build failed (attempt $i), retrying in 60s..."
+            sleep 60
+          done
+          exit 1
